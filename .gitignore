@@ -1,0 +1,101 @@
+// Nombre: Brayan Ruano
+
+#include <LiquidCrystal.h>
+LiquidCrystal lcd (9, 8, 7, 6, 5, 4);
+String dato;
+int tamano;
+int i = 0;
+int j = 1;
+int Int1 = 0;
+int Int2 = 0;
+
+void setup() {
+  // put your setup code here, to run once:
+  lcd.begin(16, 2);
+  Serial.begin(9600);
+  attachInterrupt (0, INTE1, LOW);
+  attachInterrupt (1, INTE2, LOW);
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  if (Int1 == 1) {
+    lcd.setCursor(0, 0);
+    lcd.print("Sistema ON");
+    delay (1000);
+    lcd.clear();
+    delay(200);
+    Serial.println("Seleccione Juego");
+    delay(4000);
+    if (Int2 == 1) {
+      lcd.setCursor(4, 0);
+      lcd.print("JUEGO 1");
+      delay (1000);
+      lcd.clear();
+      delay(200);
+      Serial.println("Introduzca Palabra");
+      delay(4000);
+      dato = Serial.readString();
+      juego_1(dato);
+      Serial.println("");
+    } else {
+      lcd.setCursor(4, 0);
+      lcd.print("JUEGO 2");
+      delay (1000);
+      lcd.clear();
+      delay(200);
+      Serial.println("Introduzca Palabra");
+      delay(4000);
+      dato = Serial.readString();
+      juego_2(dato);
+      Serial.println("");
+    }
+  } else {
+    lcd.clear();
+  }
+
+}
+
+void juego_1( String dato) {
+  tamano = dato.length();
+  char vector[tamano + 1];
+  dato.toCharArray(vector, tamano + 1);
+
+  for (; i < tamano; i++) {
+    j = 1 - j;
+    lcd.setCursor(i, j);
+    lcd.print(vector[i]);
+    delay(200);
+  }
+  j = 0;
+  for (; i > 0; i--) {
+    j = 1 - j;
+    lcd.setCursor(i, j);
+    lcd.print(' ');
+    delay(200);
+  }
+}
+
+void juego_2(String dato) {
+  tamano = dato.length();
+  char vector[tamano + 1];
+  dato.toCharArray(vector, tamano + 1);
+
+  for (; i < 11; i++) {
+    lcd.setCursor(i, 0);
+    lcd.print(vector[i]);
+    delay(100);
+  }
+  for (; i > 0; i--) {
+    lcd.setCursor(i, 0);
+    lcd.print(' ');
+    delay(200);
+  }
+}
+void INTE1() {
+  Int1 = 1 - Int1;
+}
+void INTE2() {
+  Int2 = 1 - Int2;
+}
